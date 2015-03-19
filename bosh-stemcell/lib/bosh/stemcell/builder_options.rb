@@ -34,6 +34,7 @@ module Bosh::Stemcell
 
     attr_reader(
       :stemcell_version,
+      :image_create_disk_size,
     )
 
     private
@@ -48,7 +49,6 @@ module Bosh::Stemcell
     attr_reader(
       :environment,
       :definition,
-      :image_create_disk_size,
       :bosh_micro_release_tgz_path,
       :os_image_tgz_path,
     )
@@ -65,6 +65,8 @@ module Bosh::Stemcell
       {
         'UBUNTU_ISO' => environment['UBUNTU_ISO'],
         'UBUNTU_MIRROR' => environment['UBUNTU_MIRROR'],
+        'RHN_USERNAME' => environment['RHN_USERNAME'],
+        'RHN_PASSWORD' => environment['RHN_PASSWORD'],
       }
     end
 

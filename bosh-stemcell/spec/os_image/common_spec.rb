@@ -25,4 +25,8 @@ describe 'On all OSes and Infrastructures', os_image: true do
       expect(sshd_config).to contain(/^MaxAuthTries 3$/)
     end
   end
+
+  describe command('nc -h') do
+    its(:stdout) { should include '-z' }
+  end
 end

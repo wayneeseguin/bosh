@@ -1,11 +1,11 @@
 #!/bin/bash
 #
-# rsyslog        Startup script for rsyslog.
+# rsyslog_build        Startup script for rsyslog_build.
 #
 # chkconfig: 2345 12 88
 # description: Syslog is the facility by which many daemons use to log \
 # messages to various system log files.  It is a good idea to always \
-# run rsyslog.
+# run rsyslog_build.
 ### BEGIN INIT INFO
 # Provides: $syslog
 # Required-Start: $local_fs

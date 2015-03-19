@@ -28,8 +28,10 @@ module Bosh::Stemcell
     attr_reader :version
 
     def prepare_build
-      sanitize
-      prepare_build_path
+      if(ENV['resume_from'] == NIL)
+        sanitize
+        prepare_build_path
+      end
       copy_stemcell_builder_to_build_path
       prepare_work_root
       prepare_stemcell_path
@@ -82,6 +84,10 @@ module Bosh::Stemcell
 
     def stemcell_tarball_path
       work_path
+    end
+
+    def stemcell_disk_size
+      stemcell_builder_options.image_create_disk_size
     end
 
     def command_env

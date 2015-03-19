@@ -24,7 +24,8 @@ Vagrant.configure('2') do |config|
 
   [:remote, :remote2].each do |name|
     config.vm.define name do |remote|
-      remote.vm.box_url = "https://bosh-jenkins-artifacts.s3.amazonaws.com/bosh-vagrant-boxes/#{vm_box}-aws.box"
+      #remote.vm.box_url = "https://bosh-jenkins-artifacts.s3.amazonaws.com/bosh-vagrant-boxes/#{vm_box}-aws.box"
+      remote.vm.box = "bosh-aws-modified"
       remote.vm.provider :aws do |aws, override|
         aws.instance_type = 'm1.large'
         aws.instance_ready_timeout = 600

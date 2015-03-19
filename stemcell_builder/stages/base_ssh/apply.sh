@@ -23,8 +23,11 @@ echo 'X11Forwarding no' >> $chroot/etc/ssh/sshd_config
 sed "/^ *MaxAuthTries/d" -i $chroot/etc/ssh/sshd_config
 echo 'MaxAuthTries 3' >> $chroot/etc/ssh/sshd_config
 
+# protect against as-shipped sshd_config that has no newline at end
+echo "" >> $chroot/etc/ssh/sshd_config
+
 # OS Specifics
-if [ "$(get_os_type)" == "centos" ]; then
+if [ "$(get_os_type)" == "centos" -o "$(get_os_type)" == "rhel" ]; then
   # Disallow CBC Ciphers
   sed "/^ *Ciphers/d" -i $chroot/etc/ssh/sshd_config
   echo 'Ciphers aes256-ctr,aes192-ctr,aes128-ctr' >> $chroot/etc/ssh/sshd_config

@@ -230,8 +230,8 @@ describe 'Ubuntu 14.04 OS image', os_image: true do
     end
   end
 
-  context 'installed by rsyslog' do
-    describe file('/etc/rsyslog.d/enable-kernel-logging.conf') do
+  context 'installed by rsyslog_build' do
+    describe file('/etc/rsyslog_build.d/enable-kernel-logging.conf') do
       it { should be_file }
       it { should contain('ModLoad imklog') }
     end

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
-
+echo ">>>>>>>>>>>>PATH = $PATH"
 base_dir=$(readlink -nf $(dirname $0)/../..)
 source $base_dir/lib/prelude_apply.bash
 source $base_dir/lib/prelude_bosh.bash
@@ -58,3 +58,4 @@ echo '{}' > $chroot/var/vcap/bosh/agent.json
 
 # We need to capture ssh events
 cp $dir/assets/rsyslog.d/10-auth_agent_forwarder.conf $chroot/etc/rsyslog.d/10-auth_agent_forwarder.conf
+echo ">>>>>>>>>>>>PATH = $PATH"

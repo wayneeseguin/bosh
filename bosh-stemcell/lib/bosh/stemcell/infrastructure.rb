@@ -87,7 +87,7 @@ module Bosh::Stemcell
           name: 'aws',
           hypervisor: 'xen',
           supports_light_stemcell: true,
-          default_disk_size: 2048,
+          default_disk_size: 3072,
           disk_formats: ['raw']
         )
       end
@@ -99,7 +99,7 @@ module Bosh::Stemcell
 
     class Warden < Base
       def initialize
-        super(name: 'warden', hypervisor: 'boshlite', default_disk_size: 2048, disk_formats: ['files'])
+        super(name: 'warden', hypervisor: 'boshlite', default_disk_size: 3072, disk_formats: ['files'])
       end
 
       def additional_cloud_properties

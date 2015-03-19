@@ -11,10 +11,12 @@ module Bosh::Stemcell
 
     def operating_system_stages
       case operating_system
-      when OperatingSystem::Centos then
-        centos_os_stages
-      when OperatingSystem::Ubuntu then
-        ubuntu_os_stages
+        when OperatingSystem::Centos then
+          centos_os_stages
+        when OperatingSystem::Rhel then
+          rhel_os_stages
+        when OperatingSystem::Ubuntu then
+          ubuntu_os_stages
       end
     end
 
@@ -67,7 +69,7 @@ module Bosh::Stemcell
     def_delegators :@definition, :infrastructure, :operating_system, :agent
 
     def openstack_stages
-      if operating_system.instance_of?(OperatingSystem::Centos)
+      if operating_system.instance_of?(OperatingSystem::Centos) or operating_system.instance_of?(OperatingSystem::Rhel)
         centos_openstack_stages
       else
         ubuntu_openstack_stages
@@ -91,16 +93,41 @@ module Bosh::Stemcell
     end
 
     def centos_os_stages
+      os_stages = [
+          :base_centos,
+          :base_centos_packages,
+          :netcat_build,
+          :base_ssh,
+          # Bosh steps
+          :bosh_users,
+          :bosh_monit,
+          :bosh_ntpdate,
+          :bosh_sudoers,
+          :rsyslog_config,
+          :delay_monit_start,
+          # Install GRUB/kernel/etc
+          :system_grub,
+      ]
+
+      if operating_system.version.to_f < 7
+        os_stages.insert(os_stages.index(:rsyslog_config),:rsyslog_build)
+      end
+
+      os_stages
+    end
+
+    def rhel_os_stages
       [
-        :base_centos,
+        :base_rhel,
         :base_centos_packages,
+        :netcat_build,
         :base_ssh,
         # Bosh steps
         :bosh_users,
         :bosh_monit,
         :bosh_ntpdate,
         :bosh_sudoers,
-        :rsyslog,
+        :rsyslog_config,
         :delay_monit_start,
         # Install GRUB/kernel/etc
         :system_grub,
@@ -124,7 +151,8 @@ module Bosh::Stemcell
         :bosh_monit,
         :bosh_ntpdate,
         :bosh_sudoers,
-        :rsyslog,
+        :rsyslog_build,
+        :rsyslog_config,
         :delay_monit_start,
         # Install GRUB/kernel/etc
         :system_grub,

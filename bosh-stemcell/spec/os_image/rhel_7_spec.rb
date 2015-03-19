@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'CentOS OS image', os_image: true do
+describe 'RHEL OS image', os_image: true do
   it_behaves_like 'an OS image'
 
   describe package('apt') do
@@ -11,9 +11,9 @@ describe 'CentOS OS image', os_image: true do
     it { should be_installed }
   end
 
-  context 'installed by base_centos' do
+  context 'installed by base_rhel' do
     %w(
-      centos-release
+      redhat-release-server
       epel-release
     ).each do |pkg|
       describe package(pkg) do
@@ -30,7 +30,7 @@ describe 'CentOS OS image', os_image: true do
       it { should contain 'UTC' }
     end
 
-    describe file('/etc/sysconfig/i18n') do
+    describe file('/etc/locale.conf') do
       it { should be_file }
       it { should contain 'en_US.UTF-8' }
     end
@@ -54,7 +54,6 @@ describe 'CentOS OS image', os_image: true do
       libxslt
       libxslt-devel
       lsof
-      nc
       openssh-server
       openssl-devel
       parted
@@ -68,10 +67,10 @@ describe 'CentOS OS image', os_image: true do
       strace
       sudo
       sysstat
+      systemd
       tcpdump
       traceroute
       unzip
-      upstart
       wget
       zip
     ).each do |pkg|
@@ -86,32 +85,26 @@ describe 'CentOS OS image', os_image: true do
 
     it 'disallows CBC ciphers' do
       ciphers = %w(
-        aes256-ctr
-        aes192-ctr
-        aes128-ctr
-      ).join(',')
+          aes256-ctr
+          aes192-ctr
+          aes128-ctr
+        ).join(',')
       expect(sshd_config).to contain(/^Ciphers #{ciphers}$/)
     end
 
     it 'disallows insecure HMACs' do
       macs = %w(
-        hmac-sha2-512
-        hmac-sha2-256
-        hmac-ripemd160
-      ).join(',')
+          hmac-sha2-512
+          hmac-sha2-256
+          hmac-ripemd160
+        ).join(',')
       expect(sshd_config).to contain(/^MACs #{macs}$/)
     end
   end
 
   context 'installed by system_grub' do
-    describe package('grub') do
+    describe package('grub2-tools') do
       it { should be_installed }
-    end
-  end
-
-  %w(e2fs_stage1_5 stage1 stage2).each do |grub_stage|
-    describe file("/boot/grub/#{grub_stage}") do
-      it { should be_file }
     end
   end
 
@@ -134,9 +127,9 @@ describe 'CentOS OS image', os_image: true do
     end
   end
 
-  context 'rsyslog' do
-    describe file('/etc/rsyslog.d/enable-kernel-logging.conf') do
-      # Make sure imklog module is not loaded in rsyslog
+  context 'rsyslog_build' do
+    describe file('/etc/rsyslog_build.d/enable-kernel-logging.conf') do
+      # Make sure imklog module is not loaded in rsyslog_build
       # to avoid CentOS stemcell pegging CPU on AWS
       it { should_not be_file } # (do not add $ in front of ModLoad because it will break the serverspec regex match)
     end

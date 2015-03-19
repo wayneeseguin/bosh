@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
-
+echo ">>>>>>>>>>>>PATH = $PATH"
 base_dir=$(readlink -nf $(dirname $0)/../..)
 source $base_dir/lib/prelude_apply.bash
 source $base_dir/lib/prelude_bosh.bash
@@ -78,3 +78,4 @@ run_in_bosh_chroot $chroot "
 cd src
 gem install $bundler_gem --local --no-ri --no-rdoc
 "
+echo ">>>>>>>>>>>>PATH = $PATH"

@@ -129,6 +129,7 @@ namespace :stemcell do
       environment.version,
       environment.work_path,
       environment.stemcell_tarball_path,
+      environment.stemcell_disk_size,
       runner,
       stemcell_building_stages,
     )
